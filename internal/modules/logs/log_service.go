@@ -82,7 +82,7 @@ func (s logsService) GetLogs(args GetLogsArgs) ([]models.LogEntryMeta, error) {
 	return s.logsRepo.ListRecentLogsByLevel(*args.Level, limit, offset)
 }
 
-func (s logsService) GetLogById(id string) (*models.LogEntry, error) {
+func (s logsService) GetLogEntryById(id string) (*models.LogEntry, error) {
 	return s.logsRepo.GetLogById(id)
 }
 

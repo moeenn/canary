@@ -109,7 +109,8 @@ func (r logsRepo) GetLogById(id string) (*models.LogEntry, error) {
 			return nil, errors.New("log entry not found")
 		}
 
-		slog.Error("failed to get log entry by id", "id", id, "error", err.Error())
+		//nolint:gosec
+		slog.Error("failed to get log entry by id", "error", err.Error())
 		return nil, errors.New("failed to find log entry")
 	}
 

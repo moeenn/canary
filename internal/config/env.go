@@ -4,21 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 )
-
-func readString(key string, fallback *string) (string, error) {
-	val := os.Getenv(key)
-	if val == "" {
-		if fallback == nil {
-			return "", fmt.Errorf("missing environment variable %q", key)
-		} else {
-			return *fallback, nil
-		}
-	}
-
-	return strings.TrimSpace(val), nil
-}
 
 func readInt(key string, fallback *int) (int, error) {
 	val := os.Getenv(key)
@@ -37,3 +23,16 @@ func readInt(key string, fallback *int) (int, error) {
 
 	return parsed, nil
 }
+
+// func readString(key string, fallback *string) (string, error) {
+// 	val := os.Getenv(key)
+// 	if val == "" {
+// 		if fallback == nil {
+// 			return "", fmt.Errorf("missing environment variable %q", key)
+// 		} else {
+// 			return *fallback, nil
+// 		}
+// 	}
+
+// 	return strings.TrimSpace(val), nil
+// }

@@ -22,8 +22,8 @@ const createLogsTableMigration string = `
 `
 
 const createLogsTableIndicesMigration string = `
-	create index log_level_idx on logs (level);
-	create index log_time_idx on logs (time);
+	create index if not exists log_level_idx on logs (level);
+	create index if not exists log_time_idx on logs (time);
 `
 
 var migrations = []string{

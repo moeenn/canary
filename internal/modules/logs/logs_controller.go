@@ -1,6 +1,9 @@
 package logs
 
-import "net/http"
+import (
+	"canary/internal/libs/server"
+	"net/http"
+)
 
 type logsController struct {
 	logsService logsService
@@ -13,19 +16,70 @@ func (c logsController) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("DELETE /api/logs", c.clearLogs)
 }
 
-// TODO: implement.
 func (c logsController) getLogs(w http.ResponseWriter, r *http.Request) {
+	args, err := getLogsArgsFromRequest(r)
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	logs, err := c.logsService.GetLogs(GetLogsArgs{
+		Limit:  &args.Limit,
+		Offset: &args.Offset,
+		Level:  args.Level,
+	})
+
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	res := getLogsResponseFromModels(logs)
+	server.SendOkResponse(w, res)
 }
 
-// TODO: implement.
 func (c logsController) getLogEntryById(w http.ResponseWriter, r *http.Request) {
-	// id := r.PathValue("id")
+	id := r.PathValue("id")
+	entry, err := c.logsService.GetLogEntryById(id)
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusNotFound, err)
+	}
+
+	res := logEntryResponseFromModel(*entry)
+	server.SendOkResponse(w, res)
 }
 
-// TODO: implement.
 func (c logsController) addLogEntry(w http.ResponseWriter, r *http.Request) {
+	payload, err := addLogEntryPayloadFromRequest(r)
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := c.logsService.AddLogEntry(payload); err != nil {
+		server.SendErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
-// TODO: implement.
 func (c logsController) clearLogs(w http.ResponseWriter, r *http.Request) {
+	args, err := clearLogsArgsFromRequest(r)
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.logsService.ClearLogs(ClearLogsArgs{
+		Start: args.StartTime,
+		End:   args.EndTime,
+	})
+
+	if err != nil {
+		server.SendErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusGone)
 }
