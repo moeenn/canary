@@ -5,6 +5,7 @@ import (
 	"canary/internal/database"
 	"canary/internal/modules/logs"
 	"fmt"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"os"
@@ -27,8 +28,13 @@ func run() error {
 	//nolint:errcheck
 	defer db.Close()
 
+	views, err := template.ParseGlob("views/*/*.html")
+	if err != nil {
+		return fmt.Errorf("failed to load views: %w", err)
+	}
+
 	mux := http.NewServeMux()
-	logs.InitModule(db, mux)
+	logs.InitModule(db, views, mux)
 
 	address := cfg.Server.Address()
 	//nolint:exhaustruct
@@ -40,6 +46,10 @@ func run() error {
 		IdleTimeout:       cfg.Server.Timeout,
 		ReadHeaderTimeout: cfg.Server.Timeout,
 	}
+
+	// serve public files.
+	fs := http.FileServer(http.Dir("./public"))
+	mux.Handle("/public/", http.StripPrefix("/public", fs))
 
 	logger.Info("starting server", "address", address)
 	return server.ListenAndServe()

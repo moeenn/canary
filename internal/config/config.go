@@ -11,7 +11,7 @@ type ServerConfig struct {
 }
 
 func newServerConfig() (*ServerConfig, error) {
-	defaultServerPort := 6000
+	defaultServerPort := 3000
 	port, err := readInt("SERVER_PORT", &defaultServerPort)
 	if err != nil {
 		return nil, err
