@@ -4,7 +4,6 @@ go 1.26.2
 
 require (
 	github.com/jmoiron/sqlx v1.4.0
-	github.com/oklog/ulid/v2 v2.1.1
 	modernc.org/sqlite v1.50.0
 )
 

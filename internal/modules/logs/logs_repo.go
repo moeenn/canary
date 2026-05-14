@@ -15,12 +15,18 @@ type logsRepo struct {
 }
 
 const addLogEntryQuery string = `
-	insert into logs (id, time, level, payload)
-	values (?, ?, ?, ?)
+	insert into logs (time, level, payload)
+	values (?, ?, ?)
 `
 
-func (r logsRepo) AddLogEntry(entry *models.LogEntry) error {
-	_, err := r.db.Exec(addLogEntryQuery, entry.Id, entry.Time, entry.Level, entry.Payload)
+type addLogEntryArgs struct {
+	Time    string
+	Level   string
+	Payload string
+}
+
+func (r logsRepo) AddLogEntry(args addLogEntryArgs) error {
+	_, err := r.db.Exec(addLogEntryQuery, args.Time, args.Level, args.Payload)
 	if err != nil {
 		slog.Error("failed to add log entry", "error", err.Error())
 		return errors.New("failed to add log entry")
@@ -33,8 +39,8 @@ const listRecentLogsQuery string = `
 		id,
 		time,
 		level
-	from logs
-	order by time desc
+	from logs l
+	order by l.time desc
 	limit ?
 	offset ?
 `
@@ -67,9 +73,9 @@ const listRecentLogsByLevelQuery string = `
 		id,
 		time,
 		level
-	from logs
-	where level = ?
-	order by time desc
+	from logs l
+	where l.level = ?
+	order by l.time desc
 	limit ?
 	offset ?
 `
@@ -98,11 +104,11 @@ func (r logsRepo) ListRecentLogsByLevel(level string, limit, offset int) ([]mode
 }
 
 const getLogByIdQuery string = `
-	select * from logs
-	where id = ?
+	select * from logs l
+	where l.id = ?
 `
 
-func (r logsRepo) GetLogById(id string) (*models.LogEntry, error) {
+func (r logsRepo) GetLogById(id int64) (*models.LogEntry, error) {
 	var entry models.LogEntry
 	if err := r.db.Get(&entry, getLogByIdQuery, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -131,8 +137,8 @@ func (r logsRepo) ClearAllLogs() error {
 }
 
 const clearLogsByDateRangeQuery string = `
-	delete from logs
-	where time between ? and ?
+	delete from logs l
+	where l.time between ? and ?
 `
 
 func (r logsRepo) ClearLogsByDateRange(start, end time.Time) error {
@@ -145,8 +151,8 @@ func (r logsRepo) ClearLogsByDateRange(start, end time.Time) error {
 }
 
 const clearLogsOlderThanDateQuery string = `
-	delete from logs
-	where data < ?
+	delete from logs l
+	where l.date < ?
 `
 
 func (r logsRepo) ClearLogsOlderThanDate(date time.Time) error {

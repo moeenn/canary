@@ -14,7 +14,7 @@ const enablePragmasMigration string = `
 
 const createLogsTableMigration string = `
 	create table if not exists logs (
-		id varchar(26) primary key not null -- ulid
+		id integer primary key not null
 		, time text not null
 		, level varchar (10) not null
 		, payload text not null

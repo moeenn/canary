@@ -3,6 +3,7 @@ package logs
 import (
 	"canary/internal/libs/server"
 	"net/http"
+	"strconv"
 )
 
 type logsApiController struct {
@@ -40,9 +41,16 @@ func (c logsApiController) getLogs(w http.ResponseWriter, r *http.Request) {
 
 func (c logsApiController) getLogEntryById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	entry, err := c.logsService.GetLogEntryById(id)
+	parsedId, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	entry, err := c.logsService.GetLogEntryById(parsedId)
 	if err != nil {
 		server.SendErrorResponse(w, http.StatusNotFound, err)
+		return
 	}
 
 	res := logEntryResponseFromModel(*entry)

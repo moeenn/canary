@@ -11,7 +11,7 @@ import (
 )
 
 func Connect(dir, dbFilename string) (*sqlx.DB, error) {
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, 0750); err != nil {
 		return nil, fmt.Errorf("failed to create database dir (%s): %w", dir, err)
 	}
 

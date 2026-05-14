@@ -1,14 +1,14 @@
 package models
 
 type LogEntry struct {
-	Id      string `db:"id"`
+	Id      int64  `db:"id"`
 	Time    string `db:"time"`
 	Level   string `db:"level"`
 	Payload string `db:"payload"`
 }
 
 type LogEntryMeta struct {
-	Id    string `db:"id"`
+	Id    int64  `db:"id"`
 	Time  string `db:"time"`
 	Level string `db:"level"`
 }

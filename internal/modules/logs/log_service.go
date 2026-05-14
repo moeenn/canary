@@ -2,7 +2,6 @@ package logs
 
 import (
 	"canary/internal/database/models"
-	"canary/internal/libs/id"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,7 +13,7 @@ type logsService struct {
 }
 
 // this can be made more flexible for accept different variations of the raw payload.
-func (s logsService) logEntryFromRawPayload(payload map[string]any) (*models.LogEntry, error) {
+func (s logsService) logEntryFromRawPayload(payload map[string]any) (*addLogEntryArgs, error) {
 	var time string
 	if t, ok := payload["time"]; ok {
 		converted, ok := t.(string)
@@ -40,8 +39,7 @@ func (s logsService) logEntryFromRawPayload(payload map[string]any) (*models.Log
 		return nil, fmt.Errorf("failed to JSON encode payload: %w", err)
 	}
 
-	entry := models.LogEntry{
-		Id:      id.New(),
+	entry := addLogEntryArgs{
 		Level:   level,
 		Time:    time,
 		Payload: string(encoded),
@@ -55,7 +53,7 @@ func (s logsService) AddLogEntry(payload map[string]any) error {
 	if err != nil {
 		return fmt.Errorf("failed to convert raw payload into log entry: %w", err)
 	}
-	return s.logsRepo.AddLogEntry(logEntry)
+	return s.logsRepo.AddLogEntry(*logEntry)
 }
 
 type GetLogsArgs struct {
@@ -82,7 +80,7 @@ func (s logsService) GetLogs(args GetLogsArgs) ([]models.LogEntryMeta, error) {
 	return s.logsRepo.ListRecentLogsByLevel(*args.Level, limit, offset)
 }
 
-func (s logsService) GetLogEntryById(id string) (*models.LogEntry, error) {
+func (s logsService) GetLogEntryById(id int64) (*models.LogEntry, error) {
 	return s.logsRepo.GetLogById(id)
 }
 

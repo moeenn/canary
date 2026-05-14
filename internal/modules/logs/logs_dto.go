@@ -69,7 +69,7 @@ func getLogsArgsFromRequest(r *http.Request) (*getLogsArgs, error) {
 }
 
 type logEntryMetaResponse struct {
-	Id    string `json:"id"`
+	Id    int64  `json:"id"`
 	Time  string `json:"time"`
 	Level string `json:"level"`
 }
@@ -99,7 +99,7 @@ func getLogsResponseFromModels(m []models.LogEntryMeta) getLogsResponse {
 }
 
 type logEntryResponse struct {
-	Id      string `json:"id"`
+	Id      int64  `json:"id"`
 	Time    string `json:"time"`
 	Level   string `json:"level"`
 	Payload string `json:"payload"`
