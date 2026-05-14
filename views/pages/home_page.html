@@ -2,6 +2,65 @@
 
 <section id="header">
     <span class="title">Canary</span>
+
+    <div id="filters">
+        <input id="start" name="start" type="datetime-local" />
+        <input id="end" name="end" type="datetime-local" />
+        <select id="level" name="level">
+            <option>All</option>
+            <option>Error</option>
+            <option>Warning</option>
+            <option>Info</option>
+        </select>
+        <button id="submit" name="submit">Go</button>
+    </div>
+</section>
+
+<section id="content">
+    <table id="logs_table">
+        <colgroup>
+            <col style="width: 11rem;">
+            <col>
+        </colgroup>
+
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Level</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td class="time">2025-01-02 10:15:00</td>
+                <td>
+                    <span class="info">Info</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">2025-01-02 10:15:00</td>
+                <td>
+                    <span class="error">Error</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">2025-01-02 10:15:00</td>
+                <td>
+                    <span class="info">Info</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">2025-01-02 10:15:00</td>
+                <td>
+                    <span class="warning">Warning</span>
+                </td>
+            </tr>
+
+            <tr class="load_more">
+                <td colspan="2">Load More</td>
+            </tr>
+        </tbody>
+    </table>
 </section>
 
 {{ template "base_layout.end" . }}

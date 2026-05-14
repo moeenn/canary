@@ -83,6 +83,7 @@
 	--border-1: #cacad8;
 	--border-2: #c5c9cc;
 	--border-3: #dfe1e5;
+	--border-radius: 4px;
 
 	/* fonts */
 	--font-family: sans-serif;
@@ -108,6 +109,12 @@ body {
 	background-color: var(--gray-3);
 	color: var(--fg-1);
 	font-family: var(--font-family);
+
+	main {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 :is(button, input[type="submit"], a) {
@@ -115,13 +122,128 @@ body {
 }
 
 #header {
+	display: flex;
+	justify-content: space-between;
 	background-color: var(--gray-1);
-	padding: var(--space-5) var(--space-4);
+	padding: var(--space-4) var(--space-5);
 	border-bottom: 3px solid var(--border-1);
 
 	.title {
 		color: var(--fg-1);
 		font-size: var(--text-size-2);
 		font-weight: 600;
+		margin: auto 0;
+	}
+
+	#filters {
+		display: flex;
+
+		#start,
+		#end,
+		#level {
+			background-color: white;
+			border: 2px solid var(--border-3);
+			border-bottom-width: 4px;
+			padding: var(--space-2);
+		}
+
+		#start {
+			border-right: 0;
+		}
+
+		#end,
+		#level {
+			border-left: 0;
+			border-right: 0;
+		}
+
+		#submit {
+			background-color: var(--primary-3);
+			font-weight: 600;
+			padding: var(--space-2) var(--space-4);
+			border: 2px solid var(--primary-4);
+			border-bottom-width: 3px;
+			border-radius: 0 var(--border-radius) var(--border-radius) 0;
+		}
+	}
+}
+
+#content {
+	flex: 1;
+	padding: var(--space-4) var(--space-5);
+
+	#logs_table {
+		width: 100%;
+		border-collapse: collapse;
+		border: 2px solid var(--border-2);
+		box-shadow: var(--shadow-sm);
+
+		thead tr {
+			background-color: var(--gray-1);
+		}
+
+		th,
+		td {
+			text-align: left;
+		}
+
+		th {
+			padding: var(--space-3) var(--space-4);
+			font-size: var(--text-size-sm);
+			font-weight: 600;
+			border-bottom: 2px solid var(--border-3);
+		}
+
+		td {
+			padding: var(--space-4);
+			border-bottom: 2px solid var(--border-3);
+		}
+
+		tbody {
+			background-color: white;
+
+			tr {
+				cursor: pointer;
+
+				.time {
+					font-size: var(--text-size-sm);
+				}
+			}
+
+			tr:hover {
+				background-color: var(--gray-1);
+			}
+
+			.info,
+			.error,
+			.warning {
+				font-size: var(--text-size-xs);
+				padding: var(--space-1) var(--space-2);
+				border-radius: var(--border-radius);
+			}
+
+			.info {
+				background-color: var(--primary-2);
+			}
+
+			.warning {
+				background-color: var(--yellow-2);
+			}
+
+			.error {
+				background-color: var(--red-2);
+			}
+
+			.load_more {
+				background-color: var(--gray-1);
+
+				td {
+					font-size: var(--text-size-sm);
+					font-weight: 600;
+					text-align: center;
+					padding: var(--space-3) var(--space-4);
+				}
+			}
+		}
 	}
 }
