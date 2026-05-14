@@ -20,7 +20,7 @@ func run() error {
 		return err
 	}
 
-	db, err := database.Connect(cfg.Database.Filepath)
+	db, err := database.Connect(cfg.Database.Dir, cfg.Database.Filename)
 	if err != nil {
 		return err
 	}

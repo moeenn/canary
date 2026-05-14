@@ -30,12 +30,14 @@ func (cfg ServerConfig) Address() string {
 }
 
 type DatabaseConfig struct {
-	Filepath string
+	Dir      string
+	Filename string
 }
 
 func newDatabaseConfig() DatabaseConfig {
 	return DatabaseConfig{
-		Filepath: "./service.db",
+		Dir:      "./data",
+		Filename: "service.db",
 	}
 }
 
